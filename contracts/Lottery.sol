@@ -9,7 +9,12 @@ contract Lottery {
     }
 
     function enter() public payable {
-        // OBS: Prevent the manager to enter.
+        // Prevent the manager to enter.
+        require(manager != msg.sender); // else, throws an error.
+        // Guarantee a minimum amount of money to enter in the lottery
+        require(msg.value > .01 ether); // else, throws an error.
+
+        // OBS: if all the require statements were met, so the function flow continues. 
 
         players.push(msg.sender);
     }

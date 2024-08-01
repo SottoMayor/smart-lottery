@@ -2,6 +2,7 @@ const ganache = require('ganache');
 const { Web3 } = require('web3');
 const assert = require('assert');
 const { interface, bytecode } = require('../compile');
+const { describe } = require('mocha');
 
 const web3 = new Web3(ganache.provider());
 
@@ -16,4 +17,10 @@ beforeEach(async () => {
     .Contract(JSON.parse(interface))
     .deploy({ data: bytecode })
     .send({from: accounts[0], gas: '1000000'})
+})
+
+describe('Lottery Contract', () => {
+    it('deploys a contract', async () => {
+        assert.ok(lottery.options.address);
+    })
 })

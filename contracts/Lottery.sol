@@ -43,4 +43,8 @@ contract Lottery {
         // All the code of the function with the restricted is applyed, will be replaced in the '_;' target.
         _;
     }
+
+    function getPlayer() public view returns (address[]) {
+        return players;
+    }
 }

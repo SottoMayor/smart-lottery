@@ -24,6 +24,9 @@ contract Lottery {
     }
 
     function pickWinner() public {
+        // Only the manager can invoke this function
+        require(manager == msg.sender); // else, throws an error.
+
         // Arithmetic modular on top of players array length
         uint index = random() % players.length;
 

@@ -23,10 +23,8 @@ contract Lottery {
         return uint(keccak256(block.difficulty, now, players));
     }
 
-    function pickWinner() public {
-        // Only the manager can invoke this function
-        require(manager == msg.sender); // else, throws an error.
-
+    // Now this function has the modify restricted
+    function pickWinner() public restricted {
         // Arithmetic modular on top of players array length
         uint index = random() % players.length;
 
@@ -35,5 +33,14 @@ contract Lottery {
 
         // Reset the players to another lottery round.
         players = new address[](0);
+    }
+
+    // Modifier function: Don't repeat yourself!
+    modifier restricted() {
+         // Only the manager can invoke this function
+        require(manager == msg.sender); // else, throws an error.
+
+        // All the code of the function with the restricted is applyed, will be replaced in the '_;' target.
+        _;
     }
 }

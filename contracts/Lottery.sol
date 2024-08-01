@@ -22,4 +22,15 @@ contract Lottery {
     function random() private view returns (uint) {
         return uint(keccak256(block.difficulty, now, players));
     }
+
+    function pickWinner() public {
+        // Arithmetic modular on top of players array length
+        uint index = random() % players.length;
+
+        // transfer the total money amount for the winner
+        players[index].transfer(this.balance); // obs: this.balance guard all the contract money
+
+        // Reset the players to another lottery round.
+        players = new address[](0);
+    }
 }

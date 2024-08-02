@@ -8,15 +8,17 @@ const web3 = new Web3(ganache.provider());
 
 let accounts;
 let lottery;
+let managerAccount;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
+    managerAccount = accounts[0]
 
     lottery = await new web3
     .eth
     .Contract(JSON.parse(interface))
     .deploy({ data: bytecode })
-    .send({from: accounts[0], gas: '1000000'})
+    .send({from: managerAccount, gas: '1000000'})
 })
 
 describe('Lottery Contract', () => {
@@ -69,5 +71,18 @@ describe('Lottery Contract', () => {
             // So, if has error, certainly, the catch block will be executed. 
             assert(err)
         }
+    });
+
+    it('requires that managers not participate', async () => {
+        try{
+            await lottery
+            .methods
+            .enter()
+            .send({from: managerAccount, value: web3.utils.toWei('1', 'ether')});
+            assert(false);
+        }catch(err){
+            assert(err);
+        }
+        
     });
 })

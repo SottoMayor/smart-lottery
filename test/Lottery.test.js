@@ -52,4 +52,22 @@ describe('Lottery Contract', () => {
             assert.equal(players[index - 1], accounts[index])
         }
     })
+
+    it('requires a minimum amount of ether to enter', async () => {
+        try{
+            await lottery
+            .methods
+            .enter()
+            .send({
+                from: accounts[1], 
+                value: 0 // Zero amount of wei
+            })
+            // If, for some reason, the send pass without throw an error I want to guarantee the test failure
+            assert(false) // This will execute the assertion negatively no matter what
+        }catch(err){
+            // That is what I want. This code should throw an error and this one will be caught here.
+            // So, if has error, certainly, the catch block will be executed. 
+            assert(err)
+        }
+    });
 })

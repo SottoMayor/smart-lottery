@@ -20,6 +20,17 @@ class App extends React.Component {
     this.setState({ manager, players, balance })
   }
 
+  onSubmit = async (event) => {
+    event.preventDefault();
+
+    const account = await web3.eth.getAccounts()[1];
+
+    await lottery.methods.enter().send({
+      from: account,
+      value: web3.utils.toWei(this.state.balance)
+    })
+  }
+
   render() {
     return (
       <div>
@@ -32,7 +43,7 @@ class App extends React.Component {
 
         <hr/>
 
-        <form>
+        <form onSubmit={this.onSubmit}>
 
           <h4>Want to try your luck?</h4>
 
